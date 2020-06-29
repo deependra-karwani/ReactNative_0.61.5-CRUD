@@ -4,6 +4,8 @@ import { startLoading, stopLoading } from '../actions/common';
 import { emailRE, passwordRE } from '../config/RegEx';
 import { forgotPasswordReq } from '../config/httpRoutes';
 import toast from '../config/toast';
+import { Container, Content, Form, Item, Label, Input, Button, Text } from 'native-base';
+import { TouchableOpacity, View } from 'react-native';
 
 class ForgotPassword extends React.Component {
 	constructor(props) {
@@ -16,8 +18,8 @@ class ForgotPassword extends React.Component {
 		};
 	}
 
-	handleChange = ({target: { name, value }}) => {
-		this.setState({[name]: value});
+	handleChange = (key, value) => {
+		this.setState({[key]: value});
 	}
 
 	handleSubmit = () => {
@@ -46,9 +48,34 @@ class ForgotPassword extends React.Component {
 	}
 
 	render() {
-		let { email, password, confPass } = this.state;
+		let { handleChange, handleSubmit, validate, state: { email, password, confPass } } = this;
 		return (
-			<></>
+			<Container>
+				<Content contentContainerStyle={{paddingTop: 30, paddingHorizontal: 20}}>
+					<Form>
+						<Item floatingLabel>
+							<Label>E-mail</Label>
+							<Input value={email} onChangeText={(val) => {handleChange("email", val)}} />
+						</Item>
+						<Item floatingLabel>
+							<Label>Password</Label>
+							<Input secureTextEntry value={password} onChangeText={(val) => {handleChange("password", val)}} />
+						</Item>
+						<Item floatingLabel>
+							<Label>Confirm Password</Label>
+							<Input secureTextEntry value={confPass} onChangeText={(val) => {handleChange("confPass", val)}} />
+						</Item>
+					</Form>
+					<Button primary block style={{marginTop: 20, marginBottom: 15}} onPress={handleSubmit} disabled={!validate()}>
+						<Text style={{color: 'white'}}>Change Password</Text>
+					</Button>
+					<View>
+						<Button bordered block onPress={() => {this.props.navigation.navigate('login')}}>
+							<Text>Log In</Text>
+						</Button>
+					</View>
+				</Content>
+			</Container>
 		);
 	}
 }

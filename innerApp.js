@@ -1,6 +1,7 @@
 import React from 'react';
 
 import AppContainer from './src/navigators/container';
+import Design from './src/components/design';
 
 import { saveFCM } from './src/actions/session';
 import { connect } from 'react-redux';
@@ -30,6 +31,7 @@ class InnerApp extends React.Component {
 					</View>
 				</Modal>
 				<AppContainer />
+				{/* <Design /> */}
 			</>
 		);
 	}

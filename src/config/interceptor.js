@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from './store';
 import { refreshTokenReq, logoutReq } from '../config/httpRoutes';
-import { removeToken, saveToken, getToken } from './localStorage';
+import { removeToken, saveToken, getToken } from './AsyncStorage';
 import { logout } from '../actions/session';
 
 
@@ -19,8 +19,8 @@ function addSubscriber(callback) {
 	subscribers.push(callback);
 }
 
-axiosInstance.interceptors.request.use(function (config) {
-	const token = getToken();
+axiosInstance.interceptors.request.use(async function (config) {
+	const token = await getToken();
 
 	if(token) {
 		config.headers['token'] = token;
@@ -39,14 +39,14 @@ axiosInstance.interceptors.response.use(function (response) {
 		if (!isAlreadyFetchingAccessToken) {
 			isAlreadyFetchingAccessToken = true;
 
-			refreshTokenReq(token).then((res) => {
+			refreshTokenReq(token).then(async (res) => {
 				isAlreadyFetchingAccessToken = false;
-				saveToken(res.headers.token);
+				await saveToken(res.headers.token);
 				onAccessTokenFetched(res.headers.token);
 			}).catch( async (err) => {
 				await logoutReq(token);
 				store.dispatch(logout());
-				removeToken();
+				await removeToken();
 				return Promise.reject(err);
 			}).catch( (err) => {
 				return Promise.reject(err);

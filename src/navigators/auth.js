@@ -1,18 +1,19 @@
 import React from 'react';
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import UserDetails from '../components/userDetails';
 import Users from '../components/users';
-import { NavigationBackStructure } from './structures';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const authScreenOptions = {
+const authTabOptions = {
 	gestureEnabled: false,
-	headerMode: 'screen',
 	animationEnabled: true,
-	animationTypeForReplace: 'push',
-	headerShown: false
+	activeTintColor: 'cyan',
+	inactiveTintColor: 'black',
+	activeBackgroundColor: 'white',
+	inactiveBackgroundColor: 'white',
+	keyboardHidesTabBar: true
 };
 
 const usersStackOptions = ({ navigation }) => ({
@@ -20,15 +21,14 @@ const usersStackOptions = ({ navigation }) => ({
 });
 
 const userDetailsStackOptions = ({ navigation }) => ({
-	title: '',
-	headerLeft: () => <NavigationBackStructure navigationProps={navigation} />
+	title: 'Profile'
 });
 
 const AuthNav = () => (
-	<Stack.Navigator initialRouteName="users" screenOptions={authScreenOptions}> 
+	<Tab.Navigator initialRouteName="users" tabBarOptions={authTabOptions} backBehavior="history" /* tabBar={(props) => <TabComp {...props} />} */ > 
 		<Stack.Screen name="users" component={Users} options={usersStackOptions} />
 		<Stack.Screen name="userDetails" component={UserDetails} options={userDetailsStackOptions} />
-	</Stack.Navigator>
+	</Tab.Navigator>
 );
 
 export default AuthNav;

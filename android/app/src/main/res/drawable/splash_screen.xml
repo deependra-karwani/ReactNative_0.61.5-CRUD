@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:drawable="@color/icon_bg" />
+	<!-- <item>
+		<bitmap
+			android:gravity="center"
+			android:src="@mipmap/splash"/>
+	</item> -->
+	<item
+		android:width="400dp"
+		android:height="600dp"
+		android:drawable="@mipmap/splash"
+		android:gravity="center" />
+</layer-list>
