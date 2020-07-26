@@ -121,11 +121,11 @@ class Register extends React.Component {
 						</Item>
 						<Item floatingLabel>
 							<Label>E-mail</Label>
-							<Input value={email} onChangeText={(val) => {handleChange("email", val)}} />
+							<Input value={email} keyboardType="email-address" onChangeText={(val) => {handleChange("email", val)}} />
 						</Item>
 						<Item floatingLabel>
 							<Label>Mobile</Label>
-							<Input value={mobile} onChangeText={(val) => {handleChange("mobile", val)}} />
+							<Input value={mobile} keyboardType="numeric" onChangeText={(val) => {handleChange("mobile", val)}} />
 						</Item>
 						<Item floatingLabel>
 							<Label>Password</Label>

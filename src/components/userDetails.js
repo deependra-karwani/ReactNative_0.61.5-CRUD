@@ -6,7 +6,7 @@ import toast from '../config/toast';
 import { nameRE, mobileRE, usernameRE } from '../config/RegEx';
 import { logout } from '../actions/session';
 import { removeToken } from '../config/AsyncStorage';
-import { withNavigationFocus } from '@react-navigation/compat';
+// import { withNavigationFocus } from '@react-navigation/compat';
 import ImagePicker from 'react-native-image-picker';
 import { Container, Content, Form, Thumbnail, Item, Label, Input, Button, Text } from 'native-base';
 import { TouchableOpacity, Alert } from 'react-native';
@@ -31,8 +31,14 @@ class UserDetails extends React.Component {
 
 	fetchData = () => {
 		this.props.startLoading();
-		let { userid } = this.props.route.params;
-		let isUser = this.props.userid === this.props.route.params.userid;
+		let userid, isUser;
+		if(this.props.route.params) {
+			userid = this.props.route.params.userid;
+			isUser = false;
+		} else {
+			userid = this.props.userid;
+			isUser = true;
+		}
 		getUserDetailsReq({userid})
 		.then( (res) => {
 			let { user, message } = res.data;
@@ -54,7 +60,8 @@ class UserDetails extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if(this.props.isFocused && !prevProps.isFocused) {
+		// if(this.props.isFocused && !prevProps.isFocused) {
+		if(this.props.navigation.isFocused() && !prevProps.navigation.isFocused()) {
 			this.fetchData();
 		}
 	}
@@ -118,7 +125,7 @@ class UserDetails extends React.Component {
 	}
 
 	delProf = () => {
-		if(this.props.userid === this.props.route.params.userid && window.confirm("Are you sure? This action is irreversible")) {
+		if(!this.props.route.params.userid && window.confirm("Are you sure? This action is irreversible")) {
 			this.props.startLoading();
 			let { userid } = this.props;
 			deleteAccountReq({userid})
@@ -126,7 +133,10 @@ class UserDetails extends React.Component {
 				toast(res.data.message || "Account Removed Successfully");
 				this.props.logout();
 				await removeToken();
-				this.props.navigation.navigate("register");
+				this.props.navigation.reset({
+					index: 0,
+					routes: [{ name: "register" }]
+				});
 			}).catch( (err) => {
 				if(err.response) {
 					toast(err.response.data.message || "Unexpected Error has Occurred");
@@ -158,7 +168,7 @@ class UserDetails extends React.Component {
 	}
 
 	logout = () => {
-		if(this.props.userid === this.props.route.params.userid) {
+		if(!this.props.route.params.userid) {
 			this.props.startLoading();
 			let { userid } = this.props;
 			logoutReq({userid})
@@ -166,7 +176,10 @@ class UserDetails extends React.Component {
 				toast(res.data.message || "Logout Successful");
 				this.props.logout();
 				await removeToken();
-				this.props.navigation.navigate("login");
+				this.props.navigation.reset({
+					index: 0,
+					routes: [{ name: "login" }]
+				});
 			}).catch( (err) => {
 				if(err.response) {
 					toast(err.response.data.message || "Unexpected Error has Occurred");
@@ -225,20 +238,26 @@ class UserDetails extends React.Component {
 						</Item>
 						<Item floatingLabel>
 							<Label>Mobile</Label>
-							<Input value={mobile} editable={isUser} onChangeText={(val) => {handleChange("mobile", val)}} />
+							<Input value={mobile} editable={isUser} keyboardType="numeric" onChangeText={(val) => {handleChange("mobile", val)}} />
 						</Item>
 					</Form>
-					<Button primary block style={{marginTop: 20, marginBottom: 15}} onPress={handleSubmit()}>
-						<Text style={{color: 'white'}}>Save Changes</Text>
-					</Button>
-					<View style={{flexDirection: 'row'}}>
-						<Button warning block style={{flex: 1}} onPress={() => {confLogout()}}>
-							<Text>Logout</Text>
-						</Button>
-						<Button danger bordered block style={{flex: 1, marginLeft: 10}} onPress={() => {confDelProf()}}>
-							<Text>Delete Profile</Text>
-						</Button>
-					</View>
+					{isUser ?
+						<>
+							<Button primary block style={{marginTop: 20, marginBottom: 15}} onPress={handleSubmit()}>
+								<Text style={{color: 'white'}}>Save Changes</Text>
+							</Button>
+							<View style={{flexDirection: 'row'}}>
+								<Button warning block style={{flex: 1}} onPress={() => {confLogout()}}>
+									<Text>Logout</Text>
+								</Button>
+								<Button danger bordered block style={{flex: 1, marginLeft: 10}} onPress={() => {confDelProf()}}>
+									<Text>Delete Profile</Text>
+								</Button>
+							</View>
+						</>
+					:
+						<></>
+					}
 				</Content>
 			</Container>
 		);
@@ -255,4 +274,5 @@ const mapDispatchToProps = (dispatch) => ({
 	logout: () => {dispatch(logout());}
 });
 
-export default withNavigationFocus(connect(mapStateToProps, mapDispatchToProps)(UserDetails));
+// export default withNavigationFocus(connect(mapStateToProps, mapDispatchToProps)(UserDetails));
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);

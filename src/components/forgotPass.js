@@ -5,7 +5,7 @@ import { emailRE, passwordRE } from '../config/RegEx';
 import { forgotPasswordReq } from '../config/httpRoutes';
 import toast from '../config/toast';
 import { Container, Content, Form, Item, Label, Input, Button, Text } from 'native-base';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
 class ForgotPassword extends React.Component {
 	constructor(props) {

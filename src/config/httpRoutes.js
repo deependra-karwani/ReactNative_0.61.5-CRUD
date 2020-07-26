@@ -4,7 +4,7 @@ const baseUrl = "http://localhost:3600/user/";
 // const baseUrl = "http://localhost:8080/user/";
 
 export const registerReq = (formData) => {
-	return axios.put(baseUrl+'register', formData);
+	return axios.post(baseUrl+'register', formData);
 };
 
 export const loginReq = (data) => {
@@ -27,8 +27,8 @@ export const getUserDetailsReq = (data) => {
 	return axios.get(baseUrl+'getDetails', {params: data});
 };
 
-export const updateProfileReq = (data) => {
-	return axios.put(baseUrl+'updProf', data);
+export const updateProfileReq = (formData) => {
+	return axios.put(baseUrl+'updProf', formData);
 };
 
 export const deleteAccountReq = (data) => {

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { startLoading, stopLoading } from '../actions/common';
 import { getAllUsersReq } from '../config/httpRoutes';
 import toast from '../config/toast';
-import { withNavigationFocus } from '@react-navigation/compat';
-import { Container, Content, Card, CardItem, Left, Thumbnail, Body, Right } from 'native-base';
+// import { withNavigationFocus } from '@react-navigation/compat';
+import { Container, Card, CardItem, Left, Thumbnail, Body, Right } from 'native-base';
 import { Text } from 'react-native';
 
 class Users extends React.Component {
@@ -41,7 +41,8 @@ class Users extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if(this.props.isFocused && !prevProps.isFocused) {
+		// if(this.props.isFocused && !prevProps.isFocused) {
+		if(this.props.navigation.isFocused() && !prevProps.navigation.isFocused()) {
 			this.fetchData();
 		}
 	}
@@ -109,4 +110,5 @@ const mapDispatchToProps = (dispatch) => ({
 	stopLoading: () => {dispatch(stopLoading());},
 });
 
-export default withNavigationFocus(connect(mapStateToProps, mapDispatchToProps)(Users));
+// export default withNavigationFocus(connect(mapStateToProps, mapDispatchToProps)(Users));
+export default connect(mapStateToProps, mapDispatchToProps)(Users);

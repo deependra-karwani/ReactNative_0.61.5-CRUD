@@ -26,8 +26,8 @@ const userDetailsStackOptions = ({ navigation }) => ({
 
 const AuthNav = () => (
 	<Tab.Navigator initialRouteName="users" tabBarOptions={authTabOptions} backBehavior="history" /* tabBar={(props) => <TabComp {...props} />} */ > 
-		<Stack.Screen name="users" component={Users} options={usersStackOptions} />
-		<Stack.Screen name="userDetails" component={UserDetails} options={userDetailsStackOptions} />
+		<Tab.Screen name="users" component={Users} options={usersStackOptions} />
+		<Tab.Screen name="userDetails" component={UserDetails} options={userDetailsStackOptions} />
 	</Tab.Navigator>
 );
 

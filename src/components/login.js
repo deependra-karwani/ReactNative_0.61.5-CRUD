@@ -37,7 +37,10 @@ class Login extends React.Component {
 					username: '',
 					password: ''
 				});
-				this.props.navigation.navigate("users");
+				this.props.navigation.reset({
+					index: 0,
+					routes: [{ name: "users" }]
+				});
 			}).catch( (err) => {
 				if(err.response) {
 					toast(err.response.data.message || "Unexpected Error has Occurred");
